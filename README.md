@@ -1,34 +1,45 @@
 # LUNAR Cosmetics
 
-TypeScript website for the LUNAR Cosmetics product catalog.
+Modern TypeScript website for the LUNAR Cosmetics product catalog.
 
-## Stack
+The site is a static React app built with Vite and deployed through GitHub Pages. Product data is stored in the codebase for now, so the site can run without a backend server. A backend can be added later for admin editing, checkout, accounts, inventory, orders, analytics, and private pricing.
 
-- Vite
+Live site:
+
+```text
+https://andrew7441.github.io/Lunar/
+```
+
+## Tech Stack
+
 - React
 - TypeScript
+- Vite
 - CSS
-- GitHub Actions CI/CD
+- GitHub Actions
+- GitHub Pages
 
-## Visual Studio
-
-Open `Lunar.sln` in Visual Studio, not just the folder:
-
-```text
-C:\Users\andre\source\repos\lunar-website\Lunar.sln
-```
-
-If Visual Studio asks for a startup project, right-click the `Lunar` project and choose `Set as Startup Project`. Then press `Ctrl+F5`. Visual Studio runs Vite on:
+## Project Structure
 
 ```text
-http://localhost:5173
+src/App.tsx              Main website experience
+src/data/products.ts     Product catalog data
+public/products/         Local product images
+public/lunar-logo.png    Brand logo
+.github/workflows/       CI/CD deployment workflow
 ```
 
-If dependencies are missing, run `npm ci` once in the terminal before pressing `Ctrl+F5`.
-## Local Development
+## Run Locally
+
+Install dependencies once:
 
 ```powershell
-npm install
+npm ci
+```
+
+Start the development server:
+
+```powershell
 npm run dev
 ```
 
@@ -38,30 +49,69 @@ Open:
 http://localhost:5173
 ```
 
-## Production Build
+## Visual Studio
 
-```powershell
-npm run build
-npm run verify:build
+Open the solution file:
+
+```text
+C:\Users\andre\source\repos\lunar-website\Lunar.sln
 ```
 
-Preview the production build:
+If Visual Studio asks for a startup project, right-click the `Lunar` project and choose `Set as Startup Project`.
 
-```powershell
-npm run preview
+Then press `Ctrl+F5`. Visual Studio should start Vite at:
+
+```text
+http://localhost:5173
 ```
 
-Open:
+If it does not run, open Visual Studio's terminal in the project folder and run:
+
+```powershell
+npm ci
+npm run dev
+```
+
+## Common Commands
+
+```powershell
+npm run dev           # Start local development
+npm run typecheck     # Check TypeScript
+npm run build         # Create production build
+npm run verify:build  # Verify production files exist
+npm run qa            # Run typecheck, build, and verification
+npm run preview       # Preview the production build locally
+```
+
+Production preview runs at:
 
 ```text
 http://localhost:4173
 ```
 
-## GitHub Pages CI/CD
+## Updating Products
 
-The workflow is in `.github/workflows/ci-cd.yml`.
+Product content is defined in:
 
-It runs:
+```text
+src/data/products.ts
+```
+
+Product images are stored in:
+
+```text
+public/products/
+```
+
+When adding or editing a product, update the product record in `src/data/products.ts` and place the matching image in `public/products/`. Keep image filenames simple and stable because the deployed website references those paths directly.
+
+The current product images were downloaded from the public LUNAR product catalog. Source URLs are kept in `src/data/products.ts` for traceability.
+
+## Deployment
+
+Deployment is automatic.
+
+When changes are pushed to the `main` branch, GitHub Actions runs:
 
 ```text
 npm ci
@@ -70,26 +120,31 @@ npm run build
 npm run verify:build
 ```
 
-Then it deploys the `dist` folder to GitHub Pages on pushes to `main` or `master`.
+If those steps pass, the `dist` folder is deployed to GitHub Pages.
 
-For the GitHub repo named `Lunar`, Vite automatically builds with the `/Lunar/` base path inside GitHub Actions.
+The workflow file is:
 
-## Push To Your GitHub Repo
-
-If the local folder is not connected to your repo yet:
-
-```powershell
-cd C:\Users\andre\source\repos\lunar-website
-git init
-git branch -M main
-git remote add origin https://github.com/YOUR_GITHUB_USERNAME/Lunar.git
-git add .
-git commit -m "Build TypeScript Lunar website"
-git push -u origin main
+```text
+.github/workflows/ci-cd.yml
 ```
 
-After the push, open the repository on GitHub and enable Pages with GitHub Actions as the source.
+The Vite config automatically uses the correct `/Lunar/` base path when building inside GitHub Actions, so the deployed site loads correctly from GitHub Pages.
 
-## Product Assets
+## Before Pushing Changes
 
-The 23 product images in `public/products` were downloaded from the current public LUNAR product catalog and are served locally by the new site. The source URLs are retained in `src/data/products.ts` for traceability.
+Run the full local check:
+
+```powershell
+npm run qa
+```
+
+Then commit and push normally:
+
+```powershell
+git status
+git add .
+git commit -m "Describe your change"
+git push
+```
+
+After the push, check the GitHub Actions tab to confirm the deployment passed.
