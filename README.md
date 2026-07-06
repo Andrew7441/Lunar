@@ -29,6 +29,8 @@ public/lunar-logo.png    Brand logo
 .github/workflows/       CI/CD deployment workflow
 ```
 
+The `dist` folder is created only after running `npm run build`. It contains the production-ready static files that GitHub Pages hosts. Do not edit `dist` directly; edit files in `src` or `public` instead.
+
 ## Run Locally
 
 Install dependencies once:
@@ -51,11 +53,7 @@ http://localhost:5173
 
 ## Visual Studio
 
-Open the solution file:
-
-```text
-C:\Users\andre\source\repos\lunar-website\Lunar.sln
-```
+Open `Lunar.sln` from the project root.
 
 If Visual Studio asks for a startup project, right-click the `Lunar` project and choose `Set as Startup Project`.
 
@@ -120,7 +118,7 @@ npm run build
 npm run verify:build
 ```
 
-If those steps pass, the `dist` folder is deployed to GitHub Pages.
+If those steps pass, GitHub Pages deploys the generated `dist` folder. This folder is produced by Vite during `npm run build` and contains the final HTML, CSS, JavaScript, and assets for the website.
 
 The workflow file is:
 
